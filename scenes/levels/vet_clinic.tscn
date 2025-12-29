@@ -172,6 +172,8 @@ transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 1, 1.2, 5)
 mesh = SubResource("BoxMesh_phone")
 
 [node name="DeskNote" type="Area3D" parent="." groups=["interactable"]]
+collision_layer = 2
+collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 4.5)
 script = ExtResource("3_note")
 note_id = "vet_desk_note"
@@ -234,6 +236,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -11.85)
 mesh = SubResource("BoxMesh_sign")
 
 [node name="EndingTrigger" type="Area3D" parent="." groups=["interactable"]]
+collision_layer = 2
+collision_mask = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -11.5)
 script = ExtResource("4_ending")
 ending_text = "Open door to waiting room 3"
