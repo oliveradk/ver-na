@@ -1,0 +1,119 @@
+[gd_scene load_steps=2 format=3 uid="uid://cending"]
+
+[sub_resource type="GDScript" id="GDScript_ending"]
+script/source = "extends Control
+
+var current_text_index: int = 0
+var ending_texts: Array[String] = [
+	\"You see Ver before they see you.\",
+	\"They're sitting in a plastic chair,\\nhands clasped, staring at the floor.\",
+	\"Fran's leash is wrapped around their wrist.\",
+	\"You say their name.\",
+	\"Ver looks up.\\nTheir eyes are red. Exhausted. Relieved.\",
+	\"\\\"She's okay,\\\" they say.\\n\\\"Fran's okay.\\\"\",
+	\"\\\"It was her heart. But they caught it in time.\\nShe's going to be fine.\\\"\",
+	\"You cross the room in three steps.\",
+	\"Ver stands.\",
+	\"You hold each other for a long time.\",
+	\"...\",
+	\"Fran came home two days later.\",
+	\"She takes her medicine twice a day now.\\nShe doesn't seem to mind.\",
+	\"Ver still takes her to the park.\\nBut now they always remember their phone.\",
+	\"Some nights, you still wake up worried.\\nBut Ver is always there.\",
+	\"You are so lucky to have found each other.\",
+	\"\\n\\nVer & Na\\n\\nA walking simulator about love.\",
+]
+
+@onready var text_label: Label = $VBoxContainer/TextLabel
+@onready var continue_hint: Label = $VBoxContainer/ContinueHint
+@onready var fade_overlay: ColorRect = $FadeOverlay
+
+func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	fade_overlay.color = Color(0, 0, 0, 1)
+	show_current_text()
+
+	var tween = create_tween()
+	tween.tween_property(fade_overlay, \"color\", Color(0, 0, 0, 0), 1.0)
+
+func _input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed:
+		advance_text()
+	if event is InputEventMouseButton and event.pressed:
+		advance_text()
+
+func show_current_text() -> void:
+	if current_text_index < ending_texts.size():
+		text_label.text = ending_texts[current_text_index]
+
+		if current_text_index == ending_texts.size() - 1:
+			continue_hint.text = \"[Click to exit]\"
+		else:
+			continue_hint.text = \"[Click to continue]\"
+
+func advance_text() -> void:
+	current_text_index += 1
+	if current_text_index >= ending_texts.size():
+		get_tree().quit()
+	else:
+		show_current_text()
+"
+
+[node name="Ending" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ending")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.12, 0.1, 0.14, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_top = -200.0
+offset_right = 400.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TextLabel" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.9, 0.85, 0.8, 1)
+theme_override_font_sizes/font_size = 24
+text = "Ending text here..."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ContinueHint" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.45, 0.4, 1)
+theme_override_font_sizes/font_size = 14
+text = "[Click to continue]"
+horizontal_alignment = 1
+
+[node name="FadeOverlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

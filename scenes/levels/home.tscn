@@ -1,0 +1,166 @@
+[gd_scene load_steps=12 format=3 uid="uid://chome"]
+
+[ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cnote_popup" path="res://scenes/ui/note_popup.tscn" id="2_ui"]
+[ext_resource type="Script" path="res://scripts/note.gd" id="3_note"]
+[ext_resource type="Script" path="res://scripts/level_transition.gd" id="4_transition"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.4, 0.45, 0.55, 1)
+sky_horizon_color = Color(0.7, 0.65, 0.6, 1)
+ground_bottom_color = Color(0.2, 0.18, 0.15, 1)
+ground_horizon_color = Color(0.5, 0.45, 0.4, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.85, 0.8, 0.75, 1)
+ambient_light_energy = 0.5
+fog_enabled = true
+fog_light_color = Color(0.8, 0.75, 0.7, 1)
+fog_density = 0.01
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(20, 1, 20)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.45, 0.35, 0.25, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_floor")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.9, 0.85, 0.8, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(12, 3, 0.2)
+material = SubResource("StandardMaterial3D_wall")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fridge"]
+albedo_color = Color(0.85, 0.85, 0.9, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fridge"]
+size = Vector3(1, 2, 0.8)
+material = SubResource("StandardMaterial3D_fridge")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_couch"]
+albedo_color = Color(0.5, 0.35, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_couch"]
+size = Vector3(2.5, 0.8, 1)
+material = SubResource("StandardMaterial3D_couch")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_table"]
+albedo_color = Color(0.4, 0.3, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_table"]
+size = Vector3(1.2, 0.5, 0.8)
+material = SubResource("StandardMaterial3D_table")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_note"]
+albedo_color = Color(1, 0.95, 0.8, 1)
+emission_enabled = true
+emission = Color(1, 0.95, 0.85, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_note"]
+size = Vector3(0.2, 0.3, 0.02)
+material = SubResource("StandardMaterial3D_note")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_note"]
+size = Vector3(0.5, 0.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_door"]
+albedo_color = Color(0.55, 0.4, 0.3, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_door"]
+size = Vector3(1.2, 2.4, 0.15)
+material = SubResource("StandardMaterial3D_door")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_door"]
+size = Vector3(1.5, 2.5, 0.5)
+
+[node name="Home" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.3, 0.4, 0, 0.8, 0.6, -0.5, -0.52, 0.693, 5, 8, 5)
+light_color = Color(1, 0.95, 0.85, 1)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 3)
+
+[node name="UI" parent="." instance=ExtResource("2_ui")]
+
+[node name="Floor" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_floor")
+
+[node name="WallBack" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -6)
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallLeft" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -6, 1.5, 0)
+mesh = SubResource("BoxMesh_wall")
+
+[node name="WallRight" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6, 1.5, 0)
+mesh = SubResource("BoxMesh_wall")
+
+[node name="Fridge" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1, -5.5)
+mesh = SubResource("BoxMesh_fridge")
+
+[node name="FridgeNote" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 1.3, -5)
+script = ExtResource("3_note")
+note_id = "fridge_note"
+interaction_text = "Read note on fridge"
+
+[node name="NoteMesh" type="MeshInstance3D" parent="FridgeNote"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="FridgeNote"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Couch" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -4)
+mesh = SubResource("BoxMesh_couch")
+
+[node name="CoffeeTable" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, -2.5)
+mesh = SubResource("BoxMesh_table")
+
+[node name="Door" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1.2, -5.85)
+mesh = SubResource("BoxMesh_door")
+
+[node name="DoorTransition" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 1, -5.5)
+script = ExtResource("4_transition")
+target_level = "dog_park"
+transition_text = "Go to the dog park"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorTransition"]
+shape = SubResource("BoxShape3D_door")
+
+[node name="LeashHook" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.1, 3, 1.5, -5.85)
+mesh = SubResource("BoxMesh_note")

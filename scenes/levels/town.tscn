@@ -1,0 +1,285 @@
+[gd_scene load_steps=20 format=3 uid="uid://ctown"]
+
+[ext_resource type="PackedScene" uid="uid://cplayer001" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cnote_popup" path="res://scenes/ui/note_popup.tscn" id="2_ui"]
+[ext_resource type="Script" path="res://scripts/note.gd" id="3_note"]
+[ext_resource type="Script" path="res://scripts/level_transition.gd" id="4_transition"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1"]
+sky_top_color = Color(0.3, 0.35, 0.45, 1)
+sky_horizon_color = Color(0.55, 0.5, 0.5, 1)
+ground_bottom_color = Color(0.2, 0.18, 0.18, 1)
+ground_horizon_color = Color(0.4, 0.35, 0.35, 1)
+
+[sub_resource type="Sky" id="Sky_1"]
+sky_material = SubResource("ProceduralSkyMaterial_1")
+
+[sub_resource type="Environment" id="Environment_1"]
+background_mode = 2
+sky = SubResource("Sky_1")
+ambient_light_source = 2
+ambient_light_color = Color(0.7, 0.65, 0.65, 1)
+ambient_light_energy = 0.5
+fog_enabled = true
+fog_light_color = Color(0.6, 0.55, 0.55, 1)
+fog_density = 0.012
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_road"]
+albedo_color = Color(0.25, 0.25, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_road"]
+size = Vector3(15, 1, 100)
+material = SubResource("StandardMaterial3D_road")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_road"]
+size = Vector3(15, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sidewalk"]
+albedo_color = Color(0.55, 0.52, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sidewalk"]
+size = Vector3(3, 0.15, 80)
+material = SubResource("StandardMaterial3D_sidewalk")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_building"]
+albedo_color = Color(0.65, 0.5, 0.45, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_building"]
+size = Vector3(6, 8, 8)
+material = SubResource("StandardMaterial3D_building")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_building2"]
+albedo_color = Color(0.55, 0.55, 0.6, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_building2"]
+size = Vector3(6, 6, 10)
+material = SubResource("StandardMaterial3D_building2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_building3"]
+albedo_color = Color(0.7, 0.6, 0.5, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_building3"]
+size = Vector3(5, 5, 6)
+material = SubResource("StandardMaterial3D_building3")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bench"]
+albedo_color = Color(0.4, 0.3, 0.2, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench"]
+size = Vector3(1.5, 0.5, 0.5)
+material = SubResource("StandardMaterial3D_bench")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_note"]
+albedo_color = Color(1, 0.95, 0.8, 1)
+emission_enabled = true
+emission = Color(1, 0.95, 0.85, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_note"]
+size = Vector3(0.2, 0.25, 0.02)
+material = SubResource("StandardMaterial3D_note")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_note"]
+size = Vector3(0.5, 0.5, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lamp"]
+albedo_color = Color(0.3, 0.3, 0.32, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lamp"]
+top_radius = 0.05
+bottom_radius = 0.08
+height = 4.0
+material = SubResource("StandardMaterial3D_lamp")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lamp_head"]
+albedo_color = Color(0.9, 0.85, 0.6, 1)
+emission_enabled = true
+emission = Color(1, 0.9, 0.6, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_lamp"]
+radius = 0.2
+height = 0.35
+material = SubResource("StandardMaterial3D_lamp_head")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_exit"]
+size = Vector3(4, 3, 1)
+
+[node name="Town" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_1")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.3, 0.4, 0, 0.8, 0.6, -0.5, -0.52, 0.693, 5, 12, 5)
+light_color = Color(0.95, 0.85, 0.8, 1)
+light_energy = 0.5
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 35)
+
+[node name="UI" parent="." instance=ExtResource("2_ui")]
+
+[node name="Road" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Road"]
+shape = SubResource("BoxShape3D_road")
+
+[node name="RoadMesh" type="MeshInstance3D" parent="Road"]
+mesh = SubResource("BoxMesh_road")
+
+[node name="SidewalkLeft" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.5, 0.025, 0)
+mesh = SubResource("BoxMesh_sidewalk")
+
+[node name="SidewalkRight" type="MeshInstance3D" parent="Road"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.025, 0)
+mesh = SubResource("BoxMesh_sidewalk")
+
+[node name="Building1_MovieTheater" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4, 25)
+mesh = SubResource("BoxMesh_building")
+
+[node name="Building2_CoffeeShop" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, 15)
+mesh = SubResource("BoxMesh_building2")
+
+[node name="Building3_GradSchool" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2.5, 0)
+mesh = SubResource("BoxMesh_building3")
+
+[node name="Building4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4, -5)
+mesh = SubResource("BoxMesh_building")
+
+[node name="Building5_VetClinic" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, -25)
+mesh = SubResource("BoxMesh_building2")
+
+[node name="Bench1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.35, 30)
+mesh = SubResource("BoxMesh_bench")
+
+[node name="Note_College" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.75, 30)
+script = ExtResource("3_note")
+note_id = "college_memory"
+interaction_text = "Read memory"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_College"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_College"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Note_MaineDrive" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0.5, 20)
+script = ExtResource("3_note")
+note_id = "maine_drive"
+interaction_text = "Read ticket stub"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_MaineDrive"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_MaineDrive"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Note_MovieNight" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1, 25)
+script = ExtResource("3_note")
+note_id = "movie_night"
+interaction_text = "Read old ticket"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_MovieNight"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_MovieNight"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Note_CoffeeShop" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.5, 15)
+script = ExtResource("3_note")
+note_id = "coffee_shop"
+interaction_text = "Read napkin"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_CoffeeShop"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_CoffeeShop"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Note_Wedding" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.5, 10)
+script = ExtResource("3_note")
+note_id = "wedding_day"
+interaction_text = "Read flower petal"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_Wedding"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_Wedding"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Note_GradSchool" type="Area3D" parent="." groups=["interactable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.5, 0)
+script = ExtResource("3_note")
+note_id = "grad_school"
+interaction_text = "Read thought"
+is_backstory = true
+
+[node name="NoteMesh" type="MeshInstance3D" parent="Note_GradSchool"]
+mesh = SubResource("BoxMesh_note")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Note_GradSchool"]
+shape = SubResource("BoxShape3D_note")
+
+[node name="Lamp1" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 30)
+
+[node name="Pole" type="MeshInstance3D" parent="Lamp1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_lamp")
+
+[node name="Light" type="MeshInstance3D" parent="Lamp1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
+mesh = SubResource("SphereMesh_lamp")
+
+[node name="Lamp2" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 10)
+
+[node name="Pole" type="MeshInstance3D" parent="Lamp2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_lamp")
+
+[node name="Light" type="MeshInstance3D" parent="Lamp2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
+mesh = SubResource("SphereMesh_lamp")
+
+[node name="Lamp3" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -10)
+
+[node name="Pole" type="MeshInstance3D" parent="Lamp3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+mesh = SubResource("CylinderMesh_lamp")
+
+[node name="Light" type="MeshInstance3D" parent="Lamp3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.2, 0)
+mesh = SubResource("SphereMesh_lamp")
+
+[node name="ExitToVet" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1, -25)
+script = ExtResource("4_transition")
+target_level = "vet_clinic"
+transition_text = "Enter vet clinic"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ExitToVet"]
+shape = SubResource("BoxShape3D_exit")
