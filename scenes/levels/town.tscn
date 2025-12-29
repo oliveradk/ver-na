@@ -102,6 +102,35 @@ radius = 0.2
 height = 0.35
 material = SubResource("StandardMaterial3D_lamp_head")
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_building"]
+size = Vector3(6, 8, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_building2"]
+size = Vector3(6, 6, 10)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_building3"]
+size = Vector3(5, 5, 6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vet"]
+albedo_color = Color(0.4, 0.6, 0.5, 1)
+emission_enabled = true
+emission = Color(0.3, 0.5, 0.4, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_vet"]
+size = Vector3(6, 6, 10)
+material = SubResource("StandardMaterial3D_vet")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sign"]
+albedo_color = Color(1, 1, 1, 1)
+emission_enabled = true
+emission = Color(0.5, 0.8, 0.6, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_sign"]
+size = Vector3(3, 1, 0.1)
+material = SubResource("StandardMaterial3D_sign")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_exit"]
 size = Vector3(4, 3, 1)
 
@@ -140,25 +169,64 @@ mesh = SubResource("BoxMesh_sidewalk")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.5, 0.025, 0)
 mesh = SubResource("BoxMesh_sidewalk")
 
-[node name="Building1_MovieTheater" type="MeshInstance3D" parent="."]
+[node name="Building1_MovieTheater" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 4, 25)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building1_MovieTheater"]
+shape = SubResource("BoxShape3D_building")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Building1_MovieTheater"]
 mesh = SubResource("BoxMesh_building")
 
-[node name="Building2_CoffeeShop" type="MeshInstance3D" parent="."]
+[node name="Building2_CoffeeShop" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, 15)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building2_CoffeeShop"]
+shape = SubResource("BoxShape3D_building2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Building2_CoffeeShop"]
 mesh = SubResource("BoxMesh_building2")
 
-[node name="Building3_GradSchool" type="MeshInstance3D" parent="."]
+[node name="Building3_GradSchool" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2.5, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building3_GradSchool"]
+shape = SubResource("BoxShape3D_building3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Building3_GradSchool"]
 mesh = SubResource("BoxMesh_building3")
 
-[node name="Building4" type="MeshInstance3D" parent="."]
+[node name="Building4" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 4, -5)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building4"]
+shape = SubResource("BoxShape3D_building")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Building4"]
 mesh = SubResource("BoxMesh_building")
 
-[node name="Building5_VetClinic" type="MeshInstance3D" parent="."]
+[node name="Building5_VetClinic" type="StaticBody3D" parent="."]
+collision_layer = 1
+collision_mask = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 3, -25)
-mesh = SubResource("BoxMesh_building2")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Building5_VetClinic"]
+shape = SubResource("BoxShape3D_building2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Building5_VetClinic"]
+mesh = SubResource("BoxMesh_vet")
+
+[node name="VetSign" type="MeshInstance3D" parent="Building5_VetClinic"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 5.1)
+mesh = SubResource("BoxMesh_sign")
 
 [node name="Bench1" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0.35, 30)
