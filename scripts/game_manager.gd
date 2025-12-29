@@ -14,7 +14,7 @@ var main_notes: Dictionary = {
 	},
 	"dog_park_note": {
 		"title": "Note on the Bench",
-		"content": "To whoever was here with the brown dog -\n\nI found this phone on the ground after you left in such a hurry. I left it at the front desk of the vet clinic on Main St.\n\nHope your pup is okay, you seemed really worried.\n\n- A fellow dog parent",
+		"content": "To whoever was here with the white dog -\n\nI found this phone on the ground after you left in such a hurry. I left it at the front desk of the vet clinic on Main St.\n\nHope your pup is okay, you seemed really worried.\n\n- A fellow dog parent",
 		"location": "dog_park"
 	},
 	"vet_desk_note": {
