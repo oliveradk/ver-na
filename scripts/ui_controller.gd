@@ -8,6 +8,7 @@ extends CanvasLayer
 
 var player: CharacterBody3D = null
 var is_note_open: bool = false
+var can_close: bool = false
 
 func _ready() -> void:
 	add_to_group("ui_controller")
@@ -18,12 +19,19 @@ func _ready() -> void:
 	await get_tree().process_frame
 	player = get_tree().get_first_node_in_group("player")
 
-func _input(event: InputEvent) -> void:
-	if is_note_open and event.is_action_pressed("interact"):
+func _unhandled_input(event: InputEvent) -> void:
+	if is_note_open and can_close and event.is_action_pressed("interact"):
+		close_note()
+		get_viewport().set_input_as_handled()
+
+func _process(_delta: float) -> void:
+	# Alternative: check input directly each frame when note is open
+	if is_note_open and can_close and Input.is_action_just_pressed("interact"):
 		close_note()
 
 func show_note(note_data: Dictionary) -> void:
 	is_note_open = true
+	can_close = false
 	note_title.text = note_data.get("title", "Note")
 	note_content.text = note_data.get("content", "")
 	note_panel.visible = true
@@ -33,8 +41,13 @@ func show_note(note_data: Dictionary) -> void:
 
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
+	# Wait a moment before allowing close to prevent same-frame close
+	await get_tree().create_timer(0.2).timeout
+	can_close = true
+
 func close_note() -> void:
 	is_note_open = false
+	can_close = false
 	note_panel.visible = false
 
 	if player:
